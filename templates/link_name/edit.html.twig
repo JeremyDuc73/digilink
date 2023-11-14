@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit LinkName{% endblock %}
+
+{% block body %}
+    <div class="container-lg">
+        <h1>Edit LinkName</h1>
+
+        {{ include('link_name/_form.html.twig', {'button_label': 'Update'}) }}
+
+        <a class="btn btn-secondary fs-6 fw-light" href="{{ path('app_link_name_index') }}">back to list</a>
+
+    </div>
+{% endblock %}

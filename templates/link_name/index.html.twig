@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello LinkNameController!{% endblock %}
+
+{% block body %}
+
+    <div class="container-lg">
+
+        <h1>Création d'un réseau social</h1>
+        <hr>
+        {% for linkName in linksName %}
+            <div class="p-2 m-1 border border-secondary d-flex justify-content-between align-items-center">
+                <p>{{ linkName.linkName }}</p>
+                <div class="d-flex flex-column justify-content-between">
+                    <a class="btn btn-primary fs-6 fw-light m-1" href="{{ path('app_linkname_edit', {'id': linkName.id}) }}">edit</a>
+                    <a class="btn btn-danger fs-6 fw-light m-1" href="{{ path('app_linkname_delete', {'id': linkName.id}) }}">delete</a>
+                </div>
+            </div>
+        {% else %}
+            <h2>No data</h2>
+        {% endfor %}
+        <a class="btn btn-success fs-6 fw-light m-1" href="{{ path('app_linkname_new') }}">Create</a>
+    </div>
+
+{% endblock %}

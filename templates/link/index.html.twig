@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello Link Controller{% endblock %}
+
+{% block body %}
+
+    <div class="container-lg">
+
+        <h1>Création d'un Link</h1>
+        <hr>
+        {% for link in links %}
+            <div class="p-2 m-1 border border-secondary d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <p>{{ link.url }}</p>
+                    <p>{{ link.linkName.linkName }}</p>
+                </div>
+                <div class="d-flex flex-column justify-content-between">
+                    <a class="btn btn-primary fs-6 fw-light m-1" href="{{ path('app_link_edit', {'id': link.id}) }}">edit</a>
+                    <a class="btn btn-danger fs-6 fw-light m-1" href="{{ path('app_link_delete', {'id': link.id}) }}">delete</a>
+                </div>
+            </div>
+        {% else %}
+            <h2>No data</h2>
+        {% endfor %}
+        <a class="btn btn-success fs-6 fw-light m-1" href="{{ path('app_link_new') }}">Create</a>
+    </div>
+
+{% endblock %}
