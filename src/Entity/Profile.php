@@ -57,6 +57,12 @@ class Profile
     #[ORM\ManyToOne(inversedBy: 'profiles')]
     private ?Grade $grade = null;
 
+    #[ORM\OneToMany(mappedBy: 'profile', targetEntity: Link::class,cascade: ['persist'])]
+    private Collection $link;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Image $profilePic = null;
+
     public function __construct()
     {
         $this->blackList = new ArrayCollection();
@@ -66,6 +72,7 @@ class Profile
         $this->postLikes = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->reposts = new ArrayCollection();
+        $this->link = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -361,6 +368,58 @@ class Profile
     public function setGrade(?Grade $grade): static
     {
         $this->grade = $grade;
+
+        return $this;
+    }
+
+    public function hasBlocked(Profile $profile):bool
+    {
+        foreach ($this->blackList as $blackList){
+            if($blackList === $profile){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return Collection<int, Link>
+     */
+    public function getLink(): Collection
+    {
+        return $this->link;
+    }
+
+    public function addLink(Link $link): static
+    {
+        if (!$this->link->contains($link)) {
+            $this->link->add($link);
+            $link->setProfile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLink(Link $link): static
+    {
+        if ($this->link->removeElement($link)) {
+            // set the owning side to null (unless already changed)
+            if ($link->getProfile() === $this) {
+                $link->setProfile(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getProfilePic(): ?Image
+    {
+        return $this->profilePic;
+    }
+
+    public function setProfilePic(?Image $profilePic): static
+    {
+        $this->profilePic = $profilePic;
 
         return $this;
     }
