@@ -2,6 +2,16 @@
 
 {% block title %}All posts{% endblock %}
 
+{% block stylesheets %}
+    {{ encore_entry_link_tags('post') }}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('post') }}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
 {% block body %}
 
     <button class="btn btn-secondary mt-3 mb-3" href="{{ path('new_post') }}">CREER UN POST</button>
@@ -9,8 +19,9 @@
     {% for post in posts %}
 
         <div class="card">
-            <h2>{{ post.title }}</h2>
-            <h6>written by {{ post.author }}</h6>
+            <div class="top">
+                <h2>{{ post.title }}</h2> <div class="three"></div>
+            <h6>written by {{ post.author.firstName }}</h6>
             <h6>at {{ post.createdAt|date('H:s - d/m/Y') }}</h6>
             <p>{{ post.content }}</p>
             <div>
