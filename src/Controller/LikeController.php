@@ -15,13 +15,14 @@ class LikeController extends AbstractController
     #[Route('/like/{id}', name: 'app_like')]
     public function index(Post $post, PostLikeRepository $likeRepository, EntityManagerInterface $manager): Response
     {
-        $profile = $this->getUser();
+        $profile = $this->getUser()->getProfile();
 
-        if ($post->getPostLikes($profile)){
+        if ($post->isLikedBy($profile)){
             $Postlike = $likeRepository->findOneBy([
                 'isLikedBy'=>$profile,
                 'post'=>$post
             ]);
+
             $manager->remove($Postlike);
             $isLiked = false;
         }else{

@@ -178,6 +178,15 @@ class Post
 
         return $this;
     }
+    public function isLikedBy(Profile $isLikedBy):bool
+    {
+        foreach ($this->postLikes as $PostLike){
+            if($PostLike->getIsLikedBy() === $isLikedBy){
+                return true;
+            }
+        }
+        return false;
+    }
     
 
     /**
