@@ -6,6 +6,7 @@ use App\Entity\Profile;
 use App\Entity\User;
 use App\Form\ProfileType;
 use App\Form\RegistrationFormType;
+use App\Repository\KeyActivationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\PseudoTypes\False_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, KeyActivationRepository $keyActivationRepository): Response
     {
         $key = $keyActivationRepository->findOneBy(["key" => $request->get('key')]);
         if ($key) {
