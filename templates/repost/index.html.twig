@@ -4,10 +4,33 @@
 
 {% block body %}
 
-    {% for reposts as repost %}
-        <div class="card">
-            <p>llala</p>
+    {% for repost in reposts %}
+
+        <div class="card p-2">
+            <div class="d-flex justify-content-between">
+                <h6>{{ repost.repostedBy.firstName }}</h6>
+                <p>{{ repost.createdAt|date('H:s - d/m/Y') }}</p>
+            </div>
+
+            <div class="card p-2 m-2">
+                <div class="top">
+                    <h2>{{ repost.originalPost.title}}</h2> <div class="three"></div>
+                </div>
+                <h6>written by {{repost.originalPost.author.firstName }}</h6>
+                <h6>at {{ repost.originalPost.createdAt|date('H:s - d/m/Y') }}</h6>
+                <p>{{ repost.originalPost.content }}</p>
+                <div>
+                    <a href="{{ path("post_show", {id:repost.originalPost.id}) }}" class="btn btn-success">Voir</a>
+                </div>
+
+                <p><strong>
+                        <a href="{{ path('app_like', {id:repost.originalPost.id}) }}" class="btn like"><i class="thumb bi bi-hand-thumbs-up{% if repost.originalPost.postLikes(app.user.profile) %}-fill{% endif %}"></i>
+                            <span class="nbrLikes">{{ repost.originalPost.Postlikes|length}}</span>
+                        </a>
+                    </strong></p>
+            </div>
         </div>
+
     {% endfor %}
 
 {% endblock %}
