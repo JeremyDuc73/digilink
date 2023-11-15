@@ -33,9 +33,6 @@ class Profile
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Post::class, orphanRemoval: true)]
     private Collection $posts;
 
-    #[ORM\OneToOne(mappedBy: 'profile', cascade: ['persist', 'remove'])]
-    private ?User $ofUser = null;
-
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Report::class, orphanRemoval: true)]
     private Collection $reports;
 
