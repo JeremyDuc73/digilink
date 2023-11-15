@@ -11,7 +11,18 @@
             <h6>written by {{ post.author }}</h6>
             <h6>at {{ post.createdAt|date('H:s - d/m/Y') }}</h6>
             <p>{{ post.content }}</p>
+            <div>
+            <a href="{{ path("post_show", {id:post.id}) }}" class="btn btn-success">Voir</a>
+            <a href="{{ path("repost", {id:post.id}) }}" class="btn btn-secondary">Repost</a>
+            </div>
         </div>
+        </div>
+
+        <p><strong>
+                <a href="{{ path('app_like', {id:post.id}) }}" class="btn like">
+                   {#  <i class="thumb bi bi-hand-thumbs-up{% if post.postLikes(app.user.profile) %}-fill{% endif %}"></i>#}
+                    <span class="nbrLikes">{{ post.Postlikes|length}}</span>
+                </a>
 
     {% endfor %}
 

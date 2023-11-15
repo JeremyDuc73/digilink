@@ -2,25 +2,24 @@
 
 namespace App\Form;
 
-use App\Entity\Profile;
+use App\Entity\Grade;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ProfileType extends AbstractType
+class GradeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('description')
-            ->add('phoneNumber')
+            ->add('gradeName')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Profile::class,
+            'data_class' => Grade::class,
         ]);
     }
 }

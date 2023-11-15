@@ -36,11 +36,39 @@ class Profile
     #[ORM\OneToOne(mappedBy: 'profile', cascade: ['persist', 'remove'])]
     private ?User $ofUser = null;
 
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Report::class, orphanRemoval: true)]
+    private Collection $reports;
+
+    #[ORM\OneToMany(mappedBy: 'isLikedBy', targetEntity: PostLike::class)]
+    private Collection $postLikes;
+
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class, orphanRemoval: true)]
+    private Collection $comments;
+
+    #[ORM\OneToMany(mappedBy: 'repostedBy', targetEntity: Repost::class, orphanRemoval: true)]
+    private Collection $reposts;
+
+    #[ORM\OneToOne(mappedBy: 'profile', cascade: ['persist', 'remove'])]
+    private ?User $ofUser = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $firstName = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $lastName = null;
+
+    #[ORM\ManyToOne(inversedBy: 'profiles')]
+    private ?Grade $grade = null;
+
     public function __construct()
     {
         $this->blackList = new ArrayCollection();
         $this->blackListed = new ArrayCollection();
         $this->posts = new ArrayCollection();
+        $this->reports = new ArrayCollection();
+        $this->postLikes = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->reposts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -166,24 +194,176 @@ class Profile
         return $this;
     }
 
+
+    /**
+     * @return Collection<int, Report>
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): static
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports->add($report);
+            $report->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): static
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getAuthor() === $this) {
+                $report->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PostLike>
+     */
+    public function getPostLikes(): Collection
+    {
+        return $this->postLikes;
+    }
+
+    public function addPostLike(PostLike $postLike): static
+    {
+        if (!$this->postLikes->contains($postLike)) {
+            $this->postLikes->add($postLike);
+            $postLike->setIsLikedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostLike(PostLike $postLike): static
+    {
+        if ($this->postLikes->removeElement($postLike)) {
+            // set the owning side to null (unless already changed)
+            if ($postLike->getIsLikedBy() === $this) {
+                $postLike->setIsLikedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getAuthor() === $this) {
+                $comment->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Repost>
+     */
+    public function getReposts(): Collection
+    {
+        return $this->reposts;
+    }
+
+    public function addRepost(Repost $repost): static
+    {
+        if (!$this->reposts->contains($repost)) {
+            $this->reposts->add($repost);
+            $repost->setRepostedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRepost(Repost $repost): static
+    {
+        if ($this->reposts->removeElement($repost)) {
+            // set the owning side to null (unless already changed)
+            if ($repost->getRepostedBy() === $this) {
+                $repost->setRepostedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getOfUser(): ?User
     {
         return $this->ofUser;
     }
 
-    public function setOfUser(?User $ofUser): static
+    public function setOfUser(User $ofUser): static
     {
-        // unset the owning side of the relation if necessary
-        if ($ofUser === null && $this->ofUser !== null) {
-            $this->ofUser->setProfile(null);
-        }
-
         // set the owning side of the relation if necessary
-        if ($ofUser !== null && $ofUser->getProfile() !== $this) {
+        if ($ofUser->getProfile() !== $this) {
             $ofUser->setProfile($this);
         }
 
         $this->ofUser = $ofUser;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(?string $firstName): static
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): static
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getGrade(): ?Grade
+    {
+        return $this->grade;
+    }
+
+    public function setGrade(?Grade $grade): static
+    {
+        $this->grade = $grade;
 
         return $this;
     }

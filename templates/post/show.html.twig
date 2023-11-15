@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}All posts{% endblock %}
+
+{% block body %}
+
+
+    <div class="card">
+        <h2>{{ post.title }} <i class="bi bi-three-dots-vertical"></i></h2>
+        <h6>written by {{ post.author.ofUser.firstName }}</h6>
+        <h6>at {{ post.createdAt|date('H:s - d/m/Y') }}</h6>
+        <p>{{ post.content }}</p>
+    </div>
+
+
+    {% for comment in post.comments %}
+        <hr>
+        <div class="container m-3">
+            <p>{{ comment.author.firstName }}</p>
+            <p>créé le {{ comment.createdAt|date("d/m/Y - H:i") }}</p>
+            <p>{{ comment.content }}</p></div>
+    {% endfor %}
+    {{ form_start(form,{'action':path('comment_create',{id:post.id})}) }}
+    {{ form_row(form.content) }}
+    <button type="submit" class="btn btn-success">POSTER</button>
+    {{ form_end(form) }}
+{% endblock %}
