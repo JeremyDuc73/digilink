@@ -14,7 +14,15 @@
 
 {% block body %}
 
-    <button class="btn btn-secondary mt-3 mb-3" href="{{ path('new_post') }}">CREER UN POST</button>
+    <a class="btn btn-secondary mt-3 mb-3" href="{{ path('new_post') }}">CREER UN POST</a>
+
+    {#    Message flash#}
+    {% for message in app.flashes('notice') %}
+        <div class="flash-notice alert alert-warning alert-dismissible fade show" role="alert">
+            <p class="mb-0">{{ message }}</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
 
     {% for post in posts %}
 
@@ -31,13 +39,7 @@
         </div>
         </div>
 
-        <p><strong>
-                <a href="{{ path('app_like', {id:post.id}) }}" class="btn like">
-                   {#  <i class="thumb bi bi-hand-thumbs-up{% if post.postLikes(app.user.profile) %}-fill{% endif %}"></i>#}
-                    <span class="nbrLikes">{{ post.Postlikes|length}}</span>
-                </a>
 
-            </strong></p>
 
     {% endfor %}
     <script>

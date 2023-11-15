@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Image manager{% endblock %}
+
+{% block body %}
+
+    {{ form_start(imageForm) }}
+    {{ form_widget(imageForm.imageFile) }}
+
+    <button type="submit" class="btn btn-light">Ajouter une image</button>
+    {{ form_end(imageForm) }}
+
+{% endblock %}

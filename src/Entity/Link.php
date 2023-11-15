@@ -20,6 +20,9 @@ class Link
     #[ORM\JoinColumn(nullable: false)]
     private ?LinkName $linkName = null;
 
+    #[ORM\ManyToOne(inversedBy: 'link')]
+    private ?Profile $profile = null;
+
 
     public function getId(): ?int
     {
@@ -46,6 +49,18 @@ class Link
     public function setLinkName(?LinkName $linkName): static
     {
         $this->linkName = $linkName;
+
+        return $this;
+    }
+
+    public function getProfile(): ?Profile
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(?Profile $profile): static
+    {
+        $this->profile = $profile;
 
         return $this;
     }
