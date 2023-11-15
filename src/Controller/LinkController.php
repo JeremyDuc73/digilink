@@ -54,7 +54,10 @@ class LinkController extends AbstractController
             return $this->redirectToRoute('app_link_index');
         }
 
-        return $this->redirectToRoute('app_link_index');
+        return $this->render('link/edit.html.twig', [
+            'link' => $link,
+            'form' => $form,
+        ]);
     }
 
     #[Route('/delete/{id}', name: 'app_link_delete')]
@@ -66,6 +69,6 @@ class LinkController extends AbstractController
         $manager->remove($link);
         $manager->flush();
 
-        return $this->redirectToRoute('app_link_name_index');
+        return $this->redirectToRoute('app_link_index');
     }
 }
