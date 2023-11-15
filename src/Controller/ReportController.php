@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Post;
 use App\Entity\Report;
+use App\Repository\ProfileRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,7 @@ class ReportController extends AbstractController
     #[Route('/report/post/{id}', name: 'app_report_post')]
     public function reportPost(Post $post, EntityManagerInterface $manager): Response
     {
+
         if ($this->getUser() != null){
             $report = new Report();
                     $report->setAuthor($this->getUser()->getProfile());

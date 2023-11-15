@@ -29,6 +29,7 @@
         <div class="card p-2 my-4">
             <div class="top">
                 <h2>{{ post.title }}</h2> <div class="three"></div>
+            </div>
             <h6>written by {{ post.author.firstName }}</h6>
             <h6>at {{ post.createdAt|date('H:s - d/m/Y') }}</h6>
 
@@ -42,7 +43,8 @@
 
                 {% if post.author != app.user.profile %}
             <a href="{{ path("repost", {id:post.id}) }}" class="btn btn-secondary">Repost</a>
-            </div>
+                {% endif %}
+
         </div>
             <p><strong>
                     <a href="{{ path('app_like', {id:post.id}) }}" class="btn like">
