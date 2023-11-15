@@ -18,7 +18,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/post')]
 class PostController extends AbstractController
 {
-
     #[Route('s', name: 'app_posts')]
     public function indexAllPosts(PostRepository $repository): Response
     {
@@ -29,12 +28,13 @@ class PostController extends AbstractController
         ]);
     }
 
+    # ROUTE A METTRE APRES DANS PROFILECONTROLLER ET MERGE AVEC INDEX-MY-REPOSTS
     #[Route('s/{id}', name: 'app_my_posts')]
     public function indexAllMyPostsAndRepublications(Profile $profile): Response
     {
         $posts = $profile->getPosts();
 
-        // ajouter republications ?
+        // ajouter republications
 
         return $this->render('post/indexMyPosts.html.twig', [
             'posts'=>$posts
