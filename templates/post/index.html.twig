@@ -26,6 +26,41 @@
                     <span class="nbrLikes">{{ post.Postlikes|length}}</span>
                 </a>
 
-    {% endfor %}
+            </strong></p>
 
+    {% endfor %}
+    <script>
+
+
+        function like(event){
+            event.preventDefault()
+
+            fetch(this.href)
+                .then(response=>response.json())
+                .then((data)=>{
+                    console.log(this)
+                    this.querySelector('.nbrLikes').innerHTML = data.count
+                    if(data.liked){
+                        this.querySelector('.thumb').classList.remove('bi-hand-thumbs-up')
+                        this.querySelector('.thumb').classList.add('bi-hand-thumbs-up-fill')
+
+                    }else{
+                        this.querySelector('.thumb').classList.remove('bi-hand-thumbs-up-fill')
+                        this.querySelector('.thumb').classList.add('bi-hand-thumbs-up')
+
+
+                    }
+                })
+        }
+
+        document.addEventListener('DOMContentLoaded', ()=>{
+            const boutonsLike = document.querySelectorAll('.like')
+
+            boutonsLike.forEach((bouton)=>{
+                bouton.addEventListener('click', like)
+            })
+        })
+
+
+    </script>
 {% endblock %}
