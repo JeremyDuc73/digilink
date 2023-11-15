@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Post;
 use App\Form\CommentType;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,7 @@ class CommentController extends AbstractController
 
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()){
 
             $comment->setPost($post);
@@ -42,18 +44,41 @@ class CommentController extends AbstractController
     }
     //---------------------------------------------------------------
 
-    #[Route('/comment/delete/{id}', name: 'app_comment')]
-    public function deleteComment(Comment $comment): Response
+    #[Route('/comment/delete/{id}', name: 'app_comment_delete')]
+    public function deleteComment(Comment $comment ,EntityManagerInterface $entityManager): Response
+    {
+
+        if($comment){
+            if($comment->getAuthor()== $this->getUser()->getProfile()){
+                $entityManager->remove($comment);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('post_show',[
+                    "id"=>$comment->getPost()->getId()
+                ]);            }
+        }
+        return $this->redirectToRoute('post_show',[
+            "id"=>$comment->getPost()->getId()
+        ]);
+    }
+ #[Route('/comment/update/{id}', name: 'app_comment_update')]
+    public function updateComment(Comment $comment ,EntityManagerInterface $entityManager, Request $request, CommentRepository $commentRepository): Response
     {
         if($comment){
-            
+            if($comment->getAuthor()== $this->getUser()->getProfile()){
+
+                $form = $this->createForm(CommentType::class, $comment);
+                $form->handleRequest($request);
+
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $comment->setIsEdited(true);
+                    $commentRepository->save($comment, true);
+                }
+                return $this->redirectToRoute('app_home');
+            }
         }
-        if ($comment) {
-            $entityManager->remove($post);
-            $entityManager->flush();
-        }
-        return $this->render('comment/index.html.twig', [
-            'controller_name' => 'CommentController',
+        return $this->render('comment/edit.html.twig', [
+            'comment' => $comment,
         ]);
     }
 }
